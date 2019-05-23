@@ -1,0 +1,19 @@
+Para entrar en la maquina de docker
+------------------------------------------
+docker exec -it symfony_www bash
+cd /var/www/html
+
+Actualizar BBDD
+-----------------------------------------
+php bin/console doctrine:schema:update --force
+
+Crear entidad con el maker
+-----------------------------------------
+php bin/console make:entity
+
+
+
+Tarea
+--------------------------------------------------------
+Creación de usuarios que puedan ver SOLO sus incidencias
+Un usuario SUPER_ADMIN que pueda ver todas

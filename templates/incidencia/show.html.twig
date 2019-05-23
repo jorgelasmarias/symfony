@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Incidencia{% endblock %}
+
+{% block body %}
+    <h1>Incidencia</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ incidencia.id }}</td>
+            </tr>
+            <tr>
+                <th>Título</th>
+                <td>{{ incidencia.title }}</td>
+            </tr>
+            <tr>
+                <th>Descripción</th>
+                <td>{{ incidencia.description }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de creación</th>
+                <td>{{ incidencia.created ? incidencia.created|date('d-m-Y') : ''  }}</td>
+            </tr>
+            <tr>
+                <th>Resuelto</th>
+                <td>{{ incidencia.resolved }}</td>
+            </tr>
+            <tr>
+                <th>Categoria</th>
+                <td>{{ incidencia.categoria }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de resolución</th>
+                <td>{{ incidencia.resolution ? incidencia.resolution|date('d-m-Y') : ''  }}</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('incidencia_index') }}">Volver al listado</a>
+
+    <a href="{{ path('incidencia_edit', {'id': incidencia.id, }) }}" class="btn btn-info">Editar</a>
+
+    {{ include('incidencia/_delete_form.html.twig') }}
+{% endblock %}

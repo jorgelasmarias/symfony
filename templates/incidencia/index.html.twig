@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Incidencias {% endblock %}
+
+{% block body %}
+    <h1>Incidencia</h1>
+
+    {{ form_start(form) }}
+    {{ form_end(form) }}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Título</th>
+                <th>Descripcion</th>
+                <th>Creación</th>
+                <th>Resuelta</th>
+                <th>Fecha Resuelta</th>
+                <th>Categoria</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for incidencia in incidencias %}
+            <tr>
+                <td>{{ incidencia.id }}</td>
+                <td>{{ incidencia.title }}</td>
+                <td>{{ incidencia.description }}</td>
+                <td>{{ incidencia.created ? incidencia.created|horaEspanola : ''  }}</td>
+                <td>{{ incidencia.resolved }}</td>
+                <td>{{ incidencia.resolution  ? incidencia.resolution|horaEspanola : '' }}</td>
+                <td>{{ incidencia.categoria }}</td>
+                <td>
+                    <a href="{{ path('incidencia_show', {'id': incidencia.id}) }}">Ver</a>
+                    <a href="{{ path('incidencia_edit', {'id': incidencia.id}) }}">Editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No se han encontrado incidencias</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('incidencia_new') }}">Crear nueva incidencia</a>
+{% endblock %}

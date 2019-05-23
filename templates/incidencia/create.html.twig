@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nueva incidencia{% endblock %}
+
+{% block body %}
+    <h1>Crear nueva incidencia</h1>
+
+    {{form_start(form)}}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.created) }}
+        {{ form_row(form.resolved) }}
+        {{ form_row(form.resolution) }}
+        {#% do form.campoSinMapear.setRendered %#}
+    {{form_end(form)}}
+
+    <a href="{{ path('incidencia_index') }}">Volver al listado</a>
+{% endblock %}
