@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="tasks")
@@ -19,6 +20,7 @@ class Task
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max = 255)
      */
     private $title;
 

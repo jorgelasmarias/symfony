@@ -35,6 +35,14 @@
                 <th>Fecha de resolución</th>
                 <td>{{ incidencia.resolution ? incidencia.resolution|date('d-m-Y') : ''  }}</td>
             </tr>
+            <tr>
+                <th>Archivo adjunto </th>
+                <td>
+                    {% if incidencia.attachment %}
+                        <a target='_blank' href='/uploads/documents/{{ incidencia.attachment }}'> Descargar </a>
+                    {% endif %}
+                </td>
+            </tr>
 
         </tbody>
     </table>

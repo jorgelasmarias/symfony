@@ -9,9 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Managers\TagManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/admin/tag")
+ * @IsGranted("ROLE_ADMIN")
  */
 class TagController extends AbstractController
 {
@@ -28,16 +31,15 @@ class TagController extends AbstractController
     /**
      * @Route("/new", name="tag_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, TagManager $tagManager): Response
     {
-        $tag = new Tag();
+        $tag = $tagManager->newObject();
         $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tag);
-            $entityManager->flush();
+
+            $tag = $tagManager->create($tag);
 
             return $this->redirectToRoute('tag_index');
         }
@@ -83,13 +85,9 @@ class TagController extends AbstractController
     /**
      * @Route("/{id}", name="tag_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Tag $tag): Response
+    public function delete(Request $request, Tag $tag, TagManager $tagManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tag->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($tag);
-            $entityManager->flush();
-        }
+        $tagManager->delete($tag);
 
         return $this->redirectToRoute('tag_index');
     }

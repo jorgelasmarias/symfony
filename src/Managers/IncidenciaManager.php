@@ -38,13 +38,13 @@ class IncidenciaManager
     {
 
         $event = new IncidenciaEvent($incidencia);
+        $this->addCodigoIncidencia->setCodigoIncidencia($incidencia);
         $this->dispatcher->dispatch(IncidenciaEvent::ADD, $event);
 
         $this->em->persist($incidencia);
         $this->em->flush();
 
         $this->addCodigoIncidencia->setCodigoIncidencia($incidencia);
-
         $this->em->flush();
 
         return $incidencia;

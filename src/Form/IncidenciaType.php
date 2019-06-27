@@ -24,7 +24,7 @@ class IncidenciaType extends AbstractType
             ->add('resolution', DateType::class, ['label' => 'Fecha de resolución', 'widget' => 'single_text', 'required' => false])
             ->add('categoria')
             ->add('tags')
-            ->add('attachment', FileType::class);;
+            ->add('attachment', FileType::class, array('data_class' => null));
     }
 
     public function configureOptions(OptionsResolver $resolver)

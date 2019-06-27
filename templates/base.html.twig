@@ -4,9 +4,44 @@
         <meta charset="UTF-8">
         <title>{% block title %}Test Applicattion{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
     </head>
+    <style>
+        .current{
+            font-weight:bold;
+        }
+
+        .nav {
+            padding:1em;
+        }
+    </style>
     <body>
+
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                {# Brand and toggle get grouped for better mobile display #}
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="navbar-collapse" id="admin-navbar-collapse-1">
+                    {{ knp_menu_render('main') }}
+                </div>
+            </div>
+        </div>
+
+
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <div style="float:right"><a href='/logout'> Cerrar sesión </a></div>
         {% endif %}
@@ -15,7 +50,7 @@
                 {{ message }}
             </div>
         {% endfor %}
-        <div id="content">
+        <div id="content" style="margin-top:50px;">
             {% block body %}{% endblock %}
         </div>
         {% block javascripts %}{% endblock %}

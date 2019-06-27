@@ -9,9 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Managers\CategoriaManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/admin/categoria")
+ * @IsGranted("ROLE_ADMIN")
  */
 class CategoriaController extends AbstractController
 {
@@ -28,16 +31,16 @@ class CategoriaController extends AbstractController
     /**
      * @Route("/new", name="categoria_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(CategoriaManager $categoriaManager, Request $request): Response
     {
-        $categorium = new Categoria();
+
+        $categorium = $categoriaManager->newObject();
         $form = $this->createForm(CategoriaType::class, $categorium);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($categorium);
-            $entityManager->flush();
+
+            $categorium = $categoriaManager->create($categorium);
 
             return $this->redirectToRoute('categoria_index');
         }
@@ -83,13 +86,9 @@ class CategoriaController extends AbstractController
     /**
      * @Route("/{id}", name="categoria_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Categoria $categorium): Response
+    public function delete(CategoriaManager $categoriaManager, Request $request, Categoria $categorium): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$categorium->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($categorium);
-            $entityManager->flush();
-        }
+        $categoriaManager->delete($categorium);
 
         return $this->redirectToRoute('categoria_index');
     }

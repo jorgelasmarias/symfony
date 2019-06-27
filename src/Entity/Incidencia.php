@@ -46,13 +46,14 @@ class Incidencia
      */
     private $resolved;
 
-        /**
+    /**
      * @ORM\Column(type="date", nullable=true))
      */
     private $resolution;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Categoria", inversedBy="incidencias")
+     * @Assert\Valid
      */
     private $categoria;
 
@@ -60,21 +61,25 @@ class Incidencia
      * Many Users have Many Groups.
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="incidencias")
      * @ORM\JoinTable(name="incidencias_tags")
+     * @Assert\Valid
      */
     private $tags;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max = 255)
      */
     private $attachment;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max = 255)
      */
     private $codigo;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="incidencias")
+     * @Assert\Valid
      */
     private $user;
 

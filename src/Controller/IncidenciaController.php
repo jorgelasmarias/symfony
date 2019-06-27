@@ -14,18 +14,26 @@ use App\Helper\MensajeIncidencia;
 use App\Managers\IncidenciaManager;
 use App\Form\SearchType;
 use App\Security\IncidenciaVoter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+
+use Knp\Component\Pager\PaginatorInterface;
+use App\Service\FileUploader;
+use App\Entity\User;
 
 /**
  * @Route("/admin/incidencia")
+ * @IsGranted("ROLE_ADMIN")
  */
 class IncidenciaController extends AbstractController{
 
     private $mensajeIncidencia;
+
+
     /**
      * @Route("/", name="incidencia_index", methods={"GET","POST"})
      */
-    public function index(IncidenciaRepository $incidenciaRepository,Request $request){
+    public function index(IncidenciaRepository $incidenciaRepository,Request $request, PaginatorInterface $paginator){
 
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
@@ -36,6 +44,15 @@ class IncidenciaController extends AbstractController{
             $incidencias = $incidenciaRepository->findByTitle($form->getData());
         }else{
             $incidencias = $incidenciaRepository->findAll();
+
+            $incidencias = $paginator->paginate(
+                // Doctrine Query, not results
+                $incidencias,
+                // Define the page parameter
+                $request->query->getInt('page', 1),
+                // Items per page
+                5
+            );
         }
         return $this->render('incidencia/index.html.twig',[
             'incidencias' => $incidencias,
@@ -47,7 +64,7 @@ class IncidenciaController extends AbstractController{
     /**
      * @Route("/new", name="incidencia_new", methods={"GET","POST"})
      */
-    public function new(IncidenciaManager $incidenciaManager,Request $request): Response
+    public function new(IncidenciaManager $incidenciaManager,Request $request, FileUploader $fileUploader): Response
     {
         $incidencia = $incidenciaManager->newObject();
         $form = $this->createForm(IncidenciaType::class, $incidencia);
@@ -60,9 +77,7 @@ class IncidenciaController extends AbstractController{
             $entityManager->persist($incidencia);
             $entityManager->flush();*/
 
-            $file = $form['attachment']->getData();
-            $filename = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move('uploads/documents', $filename);
+            $filename = $fileUploader->upload($form['attachment']->getData());
 
             $incidencia->setAttachment($filename);
 
@@ -104,6 +119,7 @@ class IncidenciaController extends AbstractController{
      */
     public function edit(Request $request, Incidencia $incidencia): Response
     {
+        $this->denyAccessUnlessGranted('view',$incidencia);
         $form = $this->createForm(IncidenciaType::class, $incidencia);
         $form->handleRequest($request);
 
@@ -128,11 +144,8 @@ class IncidenciaController extends AbstractController{
      */
     public function delete(IncidenciaManager $incidenciaManager,Request $request, Incidencia $incidencia): Response
     {
-        /*if ($this->isCsrfTokenValid('delete'.$incidencia->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($incidencia);
-            $entityManager->flush();
-        }*/
+
+        $this->denyAccessUnlessGranted('view',$incidencia);
 
         $incidenciaManager->delete($incidencia);
 

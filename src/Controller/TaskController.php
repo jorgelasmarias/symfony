@@ -9,9 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Managers\TaskManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/admin/task")
+ * @IsGranted("ROLE_ADMIN")
  */
 class TaskController extends AbstractController
 {
@@ -28,16 +31,16 @@ class TaskController extends AbstractController
     /**
      * @Route("/new", name="task_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, TaskManager $taskManager): Response
     {
-        $task = new Task();
+        $task = $taskManager->newObject();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($task);
-            $entityManager->flush();
+
+            $task = $taskManager->create($task);
+
 
             return $this->redirectToRoute('task_index');
         }
@@ -83,13 +86,9 @@ class TaskController extends AbstractController
     /**
      * @Route("/{id}", name="task_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Task $task): Response
+    public function delete(Request $request, Task $task, TaskManager $taskManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($task);
-            $entityManager->flush();
-        }
+        $taskManager->delete($task);
 
         return $this->redirectToRoute('task_index');
     }

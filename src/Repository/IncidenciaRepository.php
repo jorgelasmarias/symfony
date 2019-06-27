@@ -20,7 +20,7 @@ class IncidenciaRepository extends ServiceEntityRepository
     }
 
     public function findByTitle($value)
-    {
+    {   
         return $this->createQueryBuilder('i')
             ->andWhere('i.title LIKE :val')
             ->setParameter('val', "%".$value['titleSearch']."%")

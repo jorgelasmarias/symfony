@@ -45,4 +45,8 @@
     </table>
 
     <a href="{{ path('incidencia_new') }}">Crear nueva incidencia</a>
+
+     <div class="navigation">
+        {{ knp_pagination_render(incidencias) }}
+    </div>
 {% endblock %}
