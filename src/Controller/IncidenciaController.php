@@ -44,16 +44,17 @@ class IncidenciaController extends AbstractController{
             $incidencias = $incidenciaRepository->findByTitle($form->getData());
         }else{
             $incidencias = $incidenciaRepository->findAll();
-
-            $incidencias = $paginator->paginate(
-                // Doctrine Query, not results
-                $incidencias,
-                // Define the page parameter
-                $request->query->getInt('page', 1),
-                // Items per page
-                5
-            );
         }
+
+        $incidencias = $paginator->paginate(
+            // Doctrine Query, not results
+            $incidencias,
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            5
+        );
+
         return $this->render('incidencia/index.html.twig',[
             'incidencias' => $incidencias,
             'form' => $form->createView(),
