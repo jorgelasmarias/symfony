@@ -23,7 +23,7 @@ use App\Entity\User;
 
 /**
  * @Route("/admin/incidencia")
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_USER")
  */
 class IncidenciaController extends AbstractController{
 
