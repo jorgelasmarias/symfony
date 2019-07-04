@@ -6,6 +6,7 @@
 parameters:
     locale: 'es'
     buscar: 'vxfvxvxcvx'
+    upload_directory: 'uploads/documents'
 
 services:
     # default configuration for services in *this* file

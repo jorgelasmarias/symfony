@@ -39,7 +39,8 @@
                 <th>Archivo adjunto </th>
                 <td>
                     {% if incidencia.attachment %}
-                        <a target='_blank' href='/uploads/documents/{{ incidencia.attachment }}'> Descargar </a>
+                        <a target='_blank' href='/{{ upload_directory }}/{{ incidencia.attachment }}'> Descargar </a>
+
                     {% endif %}
                 </td>
             </tr>

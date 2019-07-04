@@ -3,16 +3,14 @@
 // src/Service/FileUploader.php
 namespace App\Service;
 
-use App\Entity\Incidencia;
-
 
 class FileUploader
 {
 
-    public function upload($file){
+    public function upload($file, $directory){
 
         $filename = md5(uniqid()).'.'.$file->guessExtension();
-        $file->move('uploads/documents', $filename);
+        $file->move($directory, $filename);
 
         return $filename;
 

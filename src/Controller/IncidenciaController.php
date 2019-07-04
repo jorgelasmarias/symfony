@@ -77,8 +77,8 @@ class IncidenciaController extends AbstractController{
             /*$entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($incidencia);
             $entityManager->flush();*/
-
-            $filename = $fileUploader->upload($form['attachment']->getData());
+            
+            $filename = $fileUploader->upload($form['attachment']->getData(), $this->getParameter('upload_directory'));
 
             $incidencia->setAttachment($filename);
 
